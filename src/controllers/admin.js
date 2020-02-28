@@ -60,12 +60,13 @@ module.exports = {
     const saltRounds = 10
     const img = req.files.image
     const fileType = img.mimetype
+    const deleted = 0;
 
     const { name, email, password } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
-        if (fileType === 'image/png') {
+    if (fileType === 'image/png') {
       type = 'png'
         }
     if (fileType === 'image/gif') {
@@ -80,7 +81,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, hash, email, image }
+      const data = { name, hash, email, image, deleted }
 
       adminModel.register(data, img).then(() => {
         res.json({
@@ -113,28 +114,46 @@ module.exports = {
             data = { name, hash, email }
             console.log('no image update')
         }else{
-            let img = req.files.image;
-            let fileType = img.mimetype;
-            let type = '';
-            if( fileType === 'image/png' ){
-                type = 'png';
-            }
-            if ( fileType === 'image/gif' ){
-                type = 'jpg';
-            }
+        let img = req.files.image;
+        let fileType = img.mimetype;
+        let type = '';
+        if (fileType === 'image/png') {
+      type = 'png'
+        }
+        if (fileType === 'image/gif') {
+      type = 'gif'
+    }
+    if (fileType === 'image/jpeg') {
+      type = 'jpg'
+    }
             const random_id = Math.floor(Math.random() * 10) + 4;
             const image = 'img-' + Date.now() + '-' + random_id + '.' + type;
             img.mv('uploads/'+ image, err =>{
-                if (err) return res.status(500).send(err)
+                if (err) return res.status(200).send('update data with image')
             })
              data = { name, image, hash, email }
         }
-        adminModel.updateAdmin(data, id_admin).then((res)=>{
+        adminModel.updateAdmin(data, id_admin).then(()=>{
             res.json({
                 status: 200,
                 message: 'update admin success',
                 data: data,
                 id: id_admin
+                })
+                
+            }).catch(err =>{
+                res.json({
+                    status: 500,
+                    message: err
+                })
+            })
+    },
+    deleteAdmin: (req, res) => {
+        const id_admin = req.query.delete;
+        adminModel.deleteAdmin(id_admin).then(result => {
+            res.json({
+                status: 200,
+                message: 'delete admin success'
             }).catch(err =>{
                 res.status(500).json({
                     status: 500,
@@ -142,19 +161,5 @@ module.exports = {
                 })
             })
         })
-    },
-    // deleteAdmin: (req, res) => {
-    //     const id_admin = req.params.id_admin;
-    //     adminModel.deleteAdmin(id_admin).then(result => {
-    //         res.json({
-    //             status: 200,
-    //             message: 'delete admin success'
-    //         }).catch(err =>{
-    //             res.status(500).json({
-    //                 status: 500,
-    //                 message: err
-    //             })
-    //         })
-    //     })
-    // }
+    }
 }

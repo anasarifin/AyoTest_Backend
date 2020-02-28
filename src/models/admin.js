@@ -4,7 +4,7 @@ const fs = require("fs");
 module.exports = {
     getAllAdmin: () => {
         return new Promise((resolve, reject) => {
-            conn.query("select * from admin", (err, result) => {
+            conn.query("select * from admin where deleted = 0", (err, result) => {
                 if (!err) {
                     resolve(result);
                 } else {
@@ -26,8 +26,7 @@ module.exports = {
                             (err, res) => {
                                 if (!err) {
                                     img.mv("uploads/" + data.image, err => {
-                                        if (err)
-                                            return res.json(500).send(err);
+                                        if (err) return res.json(500).send(err);
                                         console.log("upload success");
                                     });
 
@@ -46,35 +45,44 @@ module.exports = {
     },
     // notes update admin masih bug ( foto )
     updateAdmin: (data, id_admin) => {
-        return new Promise((resolve, reject) =>{
-            if(data.image){
-                conn.query('update admin set name = ?, password = ?, email = ?, picture = ? where id_admin = id_admin',
-                    [data.name, data.hash, data.email, data.image, id_admin],(err, result) =>{
+        return new Promise((resolve, reject) => {
+            if (data.image) {
+                conn.query(
+                    `select * from admin where id_admin = ${id_admin}`,(err, result)=>{
+                        fs.unlink("uploads/" + result[0].picture, err => reject(err));
+                    }
+                );
+                conn.query(
+                    "update admin set name = ?, password = ?, email = ?, picture = ? where id_admin = ?",
+                    [data.name, data.hash, data.email, data.image, id_admin],
+                    (err, res) => {
+                        if(!err){
+                        resolve(res)
+                        }else{
+                            reject(err)
+                        }
+                    }
+                );
+            }else{
+                conn.query(`update admin set name = '${data.name}', password = '${data.hash}', email = '${data.email}' where id_admin = ${id_admin}`,(err, result)=>{
                     if(!err){
-                        conn.query(`select * from admin where id_admin = ${id_admin}`,(err, res)=>{
-                            fs.unlink('uploads/'+res[0].picture);
-                        })
-                        resolve(result);
+                        resolve(result)
                     }else{
                         reject(err)
                     }
                 })
-            }else{
-                conn.query(`update admin set name = '${data.name}', password = '${data.hash}', email = '${data.email}' where id_admin = ${id_admin}`,
-                    (err, result)=>{
-                    if(!err){
-                        console.log('yeah')
-                        resolve(result);
-                    }else{
-                        reject(err);
-                    }
-                })
             }
-        })
+        });
     },
-    // deleteAdmin: id_admin => {
-    //     return new Promise((resolve, reject)=>{
-    //         conn.query('')
-    //     })
-    // } 
+    deleteAdmin: id_admin =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`update admin set deleted = 1 where id_admin = ${id_admin}`,(err, result) =>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(err);
+                }
+            })
+        })
+    }
 };

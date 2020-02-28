@@ -7,6 +7,6 @@ Route.get("/", adminController.getAllAdmin)
     .post("/login", adminController.login)
     .post("/register", adminController.register)
     .put("/:id", adminController.updateAdmin)
-    // .delete("/:id", adminController.deleteAdmin);
+    .put("/", adminController.deleteAdmin);
 
 module.exports = Route;
