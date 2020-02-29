@@ -3,7 +3,7 @@ const usersModel = require('../models/users');
 const miscHelper = require('../helpers/helpers');
 module.exports = {
     register:(req, res)=>{
-        const {name, email, password} = req.body 
+        const {name, email, password, picture} = req.body 
         if (!email){
             return miscHelper.response(res, {}, 422, "can't email empty")
         }
@@ -17,10 +17,10 @@ module.exports = {
             name,
             email,
             password: miscHelper.hashPassword(password),
-            picture
+            picture:picture
             
         }
-        usersModel.creatUser(data)
+        usersModel.register(data)
         .then((result) => {
             miscHelper.response(res, result, 201)
           })
@@ -81,6 +81,16 @@ module.exports = {
           .catch(err=>{
               miscHelper.response(res, {}, res.status, err)
             })
-      }
+      },
+      deleteUser: (req, res) => {
+        const id_users = req.query.delete;
+        usersModel.deleteUser(id_users)
+        .then((result) => {
+            res.json(result)
+          })
+          .catch(err=>{
+              miscHelper.response(res, {}, res.status, err)
+            })
+    }
     
 }

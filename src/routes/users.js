@@ -25,9 +25,9 @@ const usersController = require("../controllers/users.js");
 
 Route.get("/", usersController.getAllUsers)
     .post("/login", usersController.login)
-    .post("/register", usersController.register)
-    .put("/:id", usersController.updateUser)
-    .put('/', upload.single('image'), usersController.updateUser)
+    .post("/register", upload.single('picture'), usersController.register)
+    .put("/:id", upload.single('picture'), usersController.updateUser)
+    .put('/', usersController.deleteUser)
 
 
 module.exports = Route;

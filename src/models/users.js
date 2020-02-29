@@ -1,7 +1,7 @@
-const conn = require("../config/db");
+const connection = require('../configs/db');
 
 module.exports = {
-    creatUser: (data)=>{
+    register: (data)=>{
         return new Promise((resolve, reject) => {
             connection.query("INSERT INTO users SET ?", data, 
             (err, result) => {
@@ -27,7 +27,7 @@ module.exports = {
     },
     getAllUsers: () => {
         return new Promise((resolve, reject) => {
-            conn.query("select * from users", (err, result) => {
+            connection.query("SELECT * FROM users WHERE deleted = 0", (err, result) => {
                 if (!err) {
                     resolve(result);
                 } else {
@@ -38,7 +38,7 @@ module.exports = {
     },
     updateUser: (id_users, data) => {
       return new Promise((resolve, reject) => {
-        conn.query("UPDATE users SET ? WHERE id = ?", [data, id_users], 
+        connection.query("UPDATE users SET ? WHERE id = ?", [data, id_users], 
         (err, result) => {
           if (!err) {
             console.log("result", result)
@@ -48,7 +48,18 @@ module.exports = {
           }
         })
       })
-    }  
+    },
+    deleteUser: id_users =>{
+      return new Promise((resolve, reject)=>{
+          connection.query(`UPDATE users SET deleted = 1 WHERE id_users = ${id_users}`,(err, result) =>{
+              if(!err){
+                  resolve(result);
+              }else{
+                  reject(err);
+              }
+          })
+      })
+  }  
 };
 
   
