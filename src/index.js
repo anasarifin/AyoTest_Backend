@@ -1,12 +1,8 @@
-const express = require('express')
-const Route = express.Router()
+const express = require('express');
 
-// import all routes
+const users = require('./routes/users');
+const Router = express.Router();
 
-const users = require('./routes/users')
+Router.use('/users', users);
 
-// Routes
-
-Route.use('/users', users)
-
-module.exports = Route
+module.exports = Router;

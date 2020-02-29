@@ -1,66 +1,88 @@
-const connection = require('../configs/db');
+const conn = require("../config/db");
+const fs = require("fs");
 
 module.exports = {
-    register: (data)=>{
-        return new Promise((resolve, reject) => {
-            connection.query("INSERT INTO users SET ?", data, 
-            (err, result) => {
-              if (!err) {
-                resolve(result);
-              } else {
-                reject(new Error(err));
-              }
-            })    
-        })
-    },
-    getUser: (email)=>{
-        return new Promise((resolve, reject) => {
-            connection.query("SELECT id_users, name, email, password, picture FROM user WHERE email=?",email, 
-            (err, result)=>{
-                if(!err){
-                    resolve(result);
-                } else {
-                  reject(new Error(err));
-                }
-            })
-        })
-    },
     getAllUsers: () => {
         return new Promise((resolve, reject) => {
-            connection.query("SELECT * FROM users WHERE deleted = 0", (err, result) => {
+            conn.query("select * from users where deleted = 0", (err, result) => {
                 if (!err) {
                     resolve(result);
                 } else {
-                    reject(new Error(err));
+                    reject(err);
                 }
             });
         });
     },
-    updateUser: (id_users, data) => {
-      return new Promise((resolve, reject) => {
-        connection.query("UPDATE users SET ? WHERE id = ?", [data, id_users], 
-        (err, result) => {
-          if (!err) {
-            console.log("result", result)
-            resolve(result);
-          } else {
-            reject(new Error(err));
-          }
-        })
-      })
-    },
-    deleteUser: id_users =>{
-      return new Promise((resolve, reject)=>{
-          connection.query(`UPDATE users SET deleted = 1 WHERE id_users = ${id_users}`,(err, result) =>{
-              if(!err){
-                  resolve(result);
-              }else{
-                  reject(err);
-              }
-          })
-      })
-  }  
-};
+    register: (data, img) => {
+        return new Promise((resolve, reject) => {
+            conn.query(
+                "select email from users where email = ?",
+                data.email,
+                (err, result) => {
+                    if (result.length < 1) {
+                        conn.query(
+                            "insert into users set name = ?, password = ?, email = ?, picture = ?",
+                            [data.name, data.hash, data.email, data.image],
+                            (err, res) => {
+                                if (!err) {
+                                    img.mv("uploads/" + data.image, err => {
+                                        if (err) return res.json(500).send(err);
+                                        console.log("upload success");
+                                    });
 
-  
-   
+                                    resolve(res);
+                                } else {
+                                    reject(err);
+                                }
+                            }
+                        );
+                    } else {
+                        reject("email already in use");
+                    }
+                }
+            );
+        });
+    },
+    // notes update users masih bug ( foto )
+    updateUsers: (data, id_users) => {
+        return new Promise((resolve, reject) => {
+            if (data.image) {
+                conn.query(
+                    `select * from users where id_users = ${id_users}`,(err, result)=>{
+                        fs.unlink("uploads/" + result[0].picture, err => reject(err));
+                    }
+                );
+                conn.query(
+                    "update users set name = ?, password = ?, email = ?, picture = ? where id_users = ?",
+                    [data.name, data.hash, data.email, data.image, id_users],
+                    (err, res) => {
+                        if(!err){
+                        resolve(res)
+                        }else{
+                            reject(err)
+                        }
+                    }
+                );
+            }else{
+                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}' where id_users = ${id_users}`,(err, result)=>{
+                    if(!err){
+                        resolve(result)
+                    }else{
+                        reject(err)
+                    }
+                })
+            }
+        });
+    },
+    deleteUsers: id_users =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`update users set deleted = 1 where id_users = ${id_users}`,(err, result) =>{
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(err);
+                }
+            })
+        })
+    }
+};
