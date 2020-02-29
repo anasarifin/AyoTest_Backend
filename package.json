@@ -26,5 +26,13 @@
   },
   "devDependencies": {
     "morgan": "^1.9.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/difaagh/iotest-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/difaagh/iotest-api/issues"
+  },
+  "homepage": "https://github.com/difaagh/iotest-api#readme"
 }
