@@ -21,8 +21,8 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into admin set name = ?, password = ?, email = ?, picture = ?",
-                            [data.name, data.hash, data.email, data.image],
+                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?",
+                            [data.name, data.hash, data.email, data.image, data.gender],
                             (err, res) => {
                                 if (!err) {
                                     img.mv("uploads/" + data.image, err => {
@@ -53,8 +53,8 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update admin set name = ?, password = ?, email = ?, picture = ? where id_admin = ?",
-                    [data.name, data.hash, data.email, data.image, id_admin],
+                    "update admin set name = ?, gender = ?, password = ?, email = ?, picture = ? where id_admin = ?",
+                    [data.name,data.gender, data.hash, data.email, data.image, id_admin],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -64,7 +64,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update admin set name = '${data.name}', password = '${data.hash}', email = '${data.email}' where id_admin = ${id_admin}`,(err, result)=>{
+                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}' where id_admin = ${id_admin}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
