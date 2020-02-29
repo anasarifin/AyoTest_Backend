@@ -2,12 +2,11 @@ const express = require("express");
 const Route = express.Router();
 
 // import all routes
-const admin = require('./routes/admin')
-const users = require('./routes/users')
 
 // Routes
 
 const admin = require("./routes/admin");
+const users = require('./routes/users')
 const question = require("./routes/question");
 const assessment_name = require("./routes/assessment_name");
 // Routes
