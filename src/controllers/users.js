@@ -1,6 +1,6 @@
 const usersModel = require('../models/users')
 // mv for upload image
-const mv = require('mv')
+// const mv = require('mv')
 const conn = require('../config/db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
