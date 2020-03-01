@@ -18,6 +18,11 @@ Route.get("/", assessmentController.getAllAssessmentName)
   .put("/update/:id_assessment", assessmentController.updateAssessmentName)
 
   .post("/otp", otpController.generateOTP)
-  .post("/otpverif", otpController.verifOTP);
+  .post("/otpverif", otpController.verifOTP)
+  //check assessment input user
+  .get("/check/:code", assessmentController.checkAssessmentInputUser)
+
+  //change value hide
+  .put("/hide", assessmentController.hideAssessmentName);
 
 module.exports = Route;
