@@ -21,8 +21,8 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into users set name = ?, password = ?, email = ?, picture = ?",
-                            [data.name, data.hash, data.email, data.image],
+                            "insert into users set id_users = ?, password = ?, email = ?, picture = ?",
+                            [data.id_users, data.hash, data.email, data.image],
                             (err, res) => {
                                 if (!err) {
                                     img.mv("uploads/" + data.image, err => {
@@ -53,8 +53,8 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update users set name = ?, password = ?, email = ?, picture = ? where id_users = ?",
-                    [data.name, data.hash, data.email, data.image, id_users],
+                    "update users set id_users = ?, password = ?, email = ?, picture = ? where id_users = ?",
+                    [data.id_users, data.hash, data.email, data.image, id_users],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -64,7 +64,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}' where id_users = ${id_users}`,(err, result)=>{
+                conn.query(`update users set id_users = '${data.id_users}', password = '${data.hash}', email = '${data.email}' where id_users = ${id_users}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
@@ -84,5 +84,38 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+    searchUser: query => {
+        const name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";
+        const id = query.id ? "WHERE id = '" + query.id + "'" : ""
+        return new Promise((resolve, reject) => {
+          conn.query(
+            `SELECT * FROM users ${name} ${id}`,
+            (err, result) => {
+              console.log(result);
+              if (!err) {
+                resolve(result);
+              } else {
+                reject(new Error(err));
+              }
+            },
+          );
+        });
+      },
+    // searchUser: (name) => {
+    //     return new Promise((resolve, reject) => {
+    //       conn.query(
+    //         `SELECT * FROM users WHERE name LIKE '%${name}%'`,
+    //         (err, result) => {
+    //           console.log(result);
+    //           if (!err) {
+    //             resolve(result);
+    //           } else {
+    //             reject(new Error(err));
+    //           }
+    //         },
+    //       );
+    //     });
+    //   }
+
 };

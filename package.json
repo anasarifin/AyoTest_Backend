@@ -23,6 +23,7 @@
     "serialize-javascript": "^3.0.0"
   },
   "devDependencies": {
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2"
   }
 }
