@@ -123,5 +123,22 @@ module.exports = {
         }
       );
     });
+  },
+    // merge from hima (search assessment)
+  searchAssessment: (name) => {
+    return new Promise((resolve, reject) => {
+        console.log('name',name)
+      conn.query(
+        `SELECT an.id_assessment, an.name, a.id_admin, a.name as admin_name FROM assessment_name as an LEFT JOIN admin as a ON an.id_admin=a.id_admin WHERE an.name LIKE '%${name}%'`,
+        (err, result) => {
+          console.log(result);
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(new Error(err));
+          }
+        },
+      );
+    });
   }
 };

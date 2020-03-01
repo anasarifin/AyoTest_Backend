@@ -23,6 +23,8 @@ Route.get("/", assessmentController.getAllAssessmentName)
   .get("/check/:code", assessmentController.checkAssessmentInputUser)
 
   //change value hide
-  .put("/hide", assessmentController.hideAssessmentName);
+  .put("/hide", assessmentController.hideAssessmentName)
+  .get('/search',assessmentController.searchAssessment);
+
 
 module.exports = Route;

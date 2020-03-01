@@ -120,5 +120,19 @@ module.exports = {
         message: "Success to change value hide"
       });
     });
+  },
+    // merge from hima (searchAssessment)
+  searchAssessment: (req, res) => {
+    let name = req.query.name;
+    assessmentModel.searchAssessment(name)
+      .then(result => {
+        res.json({
+            total: result.length,
+            status: 200,
+            data: result,
+            message: "Success to get All Assessment Name Search"
+          });
+      })
+      .catch(err => res.json(err));
   }
 };

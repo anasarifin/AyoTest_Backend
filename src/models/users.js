@@ -83,5 +83,23 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+    // merge from hima (search user)
+    searchUser: query => {
+        const name = query.name ? "WHERE name LIKE '%" + query.name + "%'" : "";
+        const id = query.id ? "WHERE id = '" + query.id + "'" : ""
+        return new Promise((resolve, reject) => {
+          conn.query(
+            `SELECT * FROM users ${name} ${id}`,
+            (err, result) => {
+              console.log(result);
+              if (!err) {
+                resolve(result);
+              } else {
+                reject(new Error(err));
+              }
+            },
+          );
+        });
+      },
 };

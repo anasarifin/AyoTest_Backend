@@ -160,5 +160,18 @@ module.exports = {
                 })
             })
         })
+    },
+    // merge from hima ( searchUser )
+    searchUser: (req, res) => {
+      usersModel.searchUser(req.query)
+      .then(result => {
+        res.json({
+          total: result.length,
+          status: 200,
+          data: result,
+          message: "Success to get All User Search"
+          });
+      })
+      .catch(err => res.json(err))
     }
 }
