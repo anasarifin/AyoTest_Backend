@@ -1,5 +1,7 @@
 const conn = require("../config/db");
 const fs = require("fs");
+const nodemailer = require('nodemailer');
+const service = require('../../gmail');
 
 module.exports = {
     getAllAdmin: () => {
@@ -21,13 +23,38 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?",
-                            [data.name, data.hash, data.email, data.image, data.gender],
+                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?, deleted = ?",
+                            [data.name, data.hash, data.email, data.image, data.gender, data.deleted],
                             (err, res) => {
                                 if (!err) {
+
+                                    
+                                    // upload image to folder uploads
                                     img.mv("uploads/" + data.image, err => {
                                         if (err) return res.json(500).send(err);
-                                        console.log("upload success");
+                                        console.log('upload image succes')
+                                    });
+
+
+                                    const transporter = nodemailer.createTransport({
+                                        service: 'gmail',
+                                        auth: {
+                                            user: service.email,
+                                            pass: service.password
+                                        }
+                                    });
+                                    const mailOptions = {
+                                        from: service.email, 
+                                        to: `${data.email}`,
+                                        subject: 'Welcome to AyoTest!',
+                                        text: `Hai ${data.name} !, thank you for registering in our apps!`
+                                    }
+                                    transporter.sendMail(mailOptions, function (err, info) {
+                                    if(!err){
+                                        console.log(info)
+                                    }else{
+                                        console.log(err)
+                                    }
                                     });
 
                                     resolve(res);
@@ -85,15 +112,12 @@ module.exports = {
             })
         })
     },
-    forgotPassword: (email,hash) =>{
+    forgotPassword: (data,hash) =>{
         return new Promise((resolve, reject)=>{
             conn.query(`select * from admin where email = '${data.email}'`,(err, result)=>{
                 if(result.length > 0){
             conn.query(`update admin set password = '${hash}' where email = '${data.email}'`,(err, result)=>{
                 if(!err){
-                        // nodemailer
-                        const nodemailer = require('nodemailer');
-                        const service = require('../../gmail');
 
 
                         const transporter = nodemailer.createTransport({
@@ -107,7 +131,9 @@ module.exports = {
                             from: service.email, 
                             to: `${data.email}`,
                             subject: 'Forgot Password',
-                            text: `this is your new password ${data.password}`
+                            html: `dear ${data.email}, you have request to change password via forgot password,<br><br>
+                            <p>this is your new random Password : <a>${data.password}</a></p>
+                            <p>please login and change your new random password with your new password, thanks</p>`
                         }
                     transporter.sendMail(mailOptions, function (err, info) {
                         if(!err){
@@ -126,5 +152,8 @@ module.exports = {
                 }
             })
         })
+    },
+    welcomeRegister: () =>{
+
     }
 };

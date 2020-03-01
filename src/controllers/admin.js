@@ -81,7 +81,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, gender, hash, email, image, deleted }
+      const data = { name, deleted, gender, hash, email, image, deleted }
 
       adminModel.register(data, img).then(() => {
         res.json({
