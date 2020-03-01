@@ -101,7 +101,6 @@ module.exports = {
       })
     }
   },
-    // notes update users masih bug ( foto )
     updateUsers: (req, res) => {
         const { name, gender, password, email } = req.body;
         const id_users = parseInt(req.params.id);
@@ -128,7 +127,7 @@ module.exports = {
     }
             const random_id = Math.floor(Math.random() * 10) + 4;
             const image = 'img-' + Date.now() + '-' + random_id + '.' + type;
-            img.mv('uploads/'+ image, err =>{
+            img.mv('uploads/users/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
              data = { name, gender, image, hash, email }

@@ -23,14 +23,14 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?, deleted = ?",
-                            [data.name, data.hash, data.email, data.image, data.gender, data.deleted],
+                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?, phone = ?, deleted = ?",
+                            [data.name, data.hash, data.email, data.image, data.gender, data.phone, data.deleted],
                             (err, res) => {
                                 if (!err) {
 
                                     
                                     // upload image to folder uploads
-                                    img.mv("uploads/" + data.image, err => {
+                                    img.mv("uploads/admin/" + data.image, err => {
                                         if (err) return res.json(500).send(err);
                                         console.log('upload image succes')
                                     });
@@ -70,18 +70,17 @@ module.exports = {
             );
         });
     },
-    // notes update admin masih bug ( foto )
     updateAdmin: (data, id_admin) => {
         return new Promise((resolve, reject) => {
             if (data.image) {
                 conn.query(
                     `select * from admin where id_admin = ${id_admin}`,(err, result)=>{
-                        fs.unlink("uploads/" + result[0].picture, err => reject(err));
+                        fs.unlink("uploads/admin/" + result[0].picture, () => resolve(err));
                     }
                 );
                 conn.query(
-                    "update admin set name = ?, gender = ?, password = ?, email = ?, picture = ? where id_admin = ?",
-                    [data.name,data.gender, data.hash, data.email, data.image, id_admin],
+                    "update admin set name = ?, gender = ?, password = ?, email = ?, phone = ?, picture = ? where id_admin = ?",
+                    [data.name,data.gender, data.hash, data.email, data.phone, data.image, id_admin],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -91,7 +90,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}' where id_admin = ${id_admin}`,(err, result)=>{
+                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}', phone = ${data.phone} where id_admin = ${id_admin}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
@@ -153,7 +152,4 @@ module.exports = {
             })
         })
     },
-    welcomeRegister: () =>{
-
-    }
 };
