@@ -1,6 +1,6 @@
 const usersModel = require('../models/users')
 // mv for upload image
-// const mv = require('mv')
+const mv = require('mv')
 const conn = require('../config/db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
@@ -62,7 +62,7 @@ module.exports = {
     const fileType = img.mimetype
     const deleted = 0;
 
-    const { name, email, password } = req.body
+    const { name, gender, email, password } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
@@ -81,7 +81,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, hash, email, image, deleted }
+      const data = { name, gender, hash, email, image, deleted }
 
       usersModel.register(data, img).then(() => {
         res.json({
@@ -101,9 +101,8 @@ module.exports = {
       })
     }
   },
-    // notes update users masih bug ( foto )
     updateUsers: (req, res) => {
-        const { name, password, email } = req.body;
+        const { name, gender, password, email } = req.body;
         const id_users = parseInt(req.params.id);
         const saltRounds = 10
         const salt = bcrypt.genSaltSync(saltRounds)
@@ -111,7 +110,7 @@ module.exports = {
 
         var data;
         if(!req.files || Object.keys(req.files).length === 0){
-            data = { name, hash, email }
+            data = { name, gender, hash, email }
             console.log('no image update')
         }else{
         let img = req.files.image;
@@ -128,10 +127,10 @@ module.exports = {
     }
             const random_id = Math.floor(Math.random() * 10) + 4;
             const image = 'img-' + Date.now() + '-' + random_id + '.' + type;
-            img.mv('uploads/'+ image, err =>{
+            img.mv('uploads/users/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
-             data = { name, image, hash, email }
+             data = { name, gender, image, hash, email }
         }
         usersModel.updateUsers(data, id_users).then(()=>{
             res.json({

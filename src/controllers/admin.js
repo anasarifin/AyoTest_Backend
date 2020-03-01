@@ -24,7 +24,7 @@ module.exports = {
         if (result.length < 1) {
           return res.status(400).json({
             success: false,
-            message: 'email and password not found'
+            message: 'email or password not found please register first'
           })
         }
 
@@ -62,7 +62,7 @@ module.exports = {
     const fileType = img.mimetype
     const deleted = 0;
 
-    const { name, email, password } = req.body
+    const { name, email, password, phone, gender } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
@@ -81,7 +81,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, hash, email, image, deleted }
+      const data = { name, phone, deleted, gender, hash, email, image, deleted }
 
       adminModel.register(data, img).then(() => {
         res.json({
@@ -101,9 +101,8 @@ module.exports = {
       })
     }
   },
-    // notes update admin masih bug ( foto )
     updateAdmin: (req, res) => {
-        const { name, password, email } = req.body;
+        const { name, gender, password, email, phone } = req.body;
         const id_admin = parseInt(req.params.id);
         const saltRounds = 10
         const salt = bcrypt.genSaltSync(saltRounds)
@@ -111,7 +110,7 @@ module.exports = {
 
         var data;
         if(!req.files || Object.keys(req.files).length === 0){
-            data = { name, hash, email }
+            data = { name, gender, hash, email, phone }
             console.log('no image update')
         }else{
         let img = req.files.image;
@@ -128,10 +127,10 @@ module.exports = {
     }
             const random_id = Math.floor(Math.random() * 10) + 4;
             const image = 'img-' + Date.now() + '-' + random_id + '.' + type;
-            img.mv('uploads/'+ image, err =>{
+            img.mv('uploads/admin/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
-             data = { name, image, hash, email }
+             data = { name,gender, image, hash, email, phone }
         }
         adminModel.updateAdmin(data, id_admin).then(()=>{
             res.json({
@@ -150,16 +149,39 @@ module.exports = {
     },
     deleteAdmin: (req, res) => {
         const id_admin = req.query.delete;
-        adminModel.deleteAdmin(id_admin).then(result => {
+        adminModel.deleteAdmin(id_admin).then(() => {
             res.json({
                 status: 200,
                 message: 'delete admin success'
-            }).catch(err =>{
+            })
+        }).catch(err =>{
                 res.status(500).json({
                     status: 500,
                     message: err
                 })
             })
-        })
-    }
+    },
+    forgotPassword: (req, res) => {
+        const email = req.query.email;
+
+        // password generator
+        const saltRounds = 10
+        const password = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const salt = bcrypt.genSaltSync(saltRounds)
+        const hash = bcrypt.hashSync(password, salt)
+
+        data = { email, password }
+        adminModel.forgotPassword(data, hash).then(() => {
+            res.json({
+                status: 200,
+                message: 'message sent'
+            })
+        }).catch(err => {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            })
+
+     },
 }
