@@ -24,7 +24,7 @@ module.exports = {
         if (result.length < 1) {
           return res.status(400).json({
             success: false,
-            message: 'email and password not found'
+            message: 'email or password not found please register first'
           })
         }
 
@@ -101,7 +101,6 @@ module.exports = {
       })
     }
   },
-    // notes update admin masih bug ( foto )
     updateAdmin: (req, res) => {
         const { name,gender, password, email } = req.body;
         const id_admin = parseInt(req.params.id);
@@ -150,16 +149,39 @@ module.exports = {
     },
     deleteAdmin: (req, res) => {
         const id_admin = req.query.delete;
-        adminModel.deleteAdmin(id_admin).then(result => {
+        adminModel.deleteAdmin(id_admin).then(() => {
             res.json({
                 status: 200,
                 message: 'delete admin success'
-            }).catch(err =>{
+            })
+        }).catch(err =>{
                 res.status(500).json({
                     status: 500,
                     message: err
                 })
             })
-        })
-    }
+    },
+    forgotPassword: (req, res) => {
+        const email = req.query.email;
+
+        // password generator
+        const saltRounds = 10
+        const password = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const salt = bcrypt.genSaltSync(saltRounds)
+        const hash = bcrypt.hashSync(password, salt)
+
+        data = { email, password }
+        adminModel.forgotPassword(data, hash).then(() => {
+            res.json({
+                status: 200,
+                message: 'message sent'
+            })
+        }).catch(err => {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            })
+
+     },
 }

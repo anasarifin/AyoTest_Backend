@@ -84,5 +84,47 @@ module.exports = {
                 }
             })
         })
+    },
+    forgotPassword: (email,hash) =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`select * from admin where email = '${data.email}'`,(err, result)=>{
+                if(result.length > 0){
+            conn.query(`update admin set password = '${hash}' where email = '${data.email}'`,(err, result)=>{
+                if(!err){
+                        // nodemailer
+                        const nodemailer = require('nodemailer');
+                        const service = require('../../gmail');
+
+
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: service.email,
+                                pass: service.password
+                            }
+                        });
+                        const mailOptions = {
+                            from: service.email, 
+                            to: `${data.email}`,
+                            subject: 'Forgot Password',
+                            text: `this is your new password ${data.password}`
+                        }
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if(!err){
+                            resolve(result)
+                        }else{
+                            reject(err)
+                        }
+                    });
+                }else{
+                    reject(err)
+                }
+            })
+
+                }else{
+                    reject('email not found please register first');
+                }
+            })
+        })
     }
 };
