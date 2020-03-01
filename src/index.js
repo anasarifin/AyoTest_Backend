@@ -10,7 +10,6 @@ const question = require("./routes/question");
 const assessment_name = require("./routes/assessment_name");
 const otp = require("./routes/otp");
 
-
 // Routes
 Route.use('/admin', admin)
 Route.use('/score', score)
