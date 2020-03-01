@@ -81,5 +81,44 @@ module.exports = {
         message: "Success delete assessment"
       });
     });
+  },
+
+  //check code assessment
+  checkAssessmentInputUser: (req, res) => {
+    code = req.params.code;
+    assessmentModel.checkAssessmentInputUser(code).then(result => {
+      if (result.length === 0) {
+        console.log("assessment tidak tersedia");
+        res.json({
+          total: result.length,
+          status: 403,
+          data: result,
+          message: "Assesment code not available"
+        });
+      } else {
+        console.log("selamat mengerjakan");
+        res.json({
+          total: result.length,
+          status: 200,
+          data: result,
+          message: "Success access this assessment"
+        });
+      }
+    });
+  },
+
+  hideAssessmentName: (req, res) => {
+    let data = {
+      hide: req.body.hide,
+      id_assessment: req.body.id_assessment
+    };
+    assessmentModel.hideAssessmentName(data).then(result => {
+      res.json({
+        total: result.length,
+        status: 200,
+        data: result,
+        message: "Success to change value hide"
+      });
+    });
   }
 };

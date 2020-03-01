@@ -89,5 +89,39 @@ module.exports = {
         }
       );
     });
+  },
+
+  // check code assessment Input User
+  checkAssessmentInputUser: code => {
+    return new Promise((resolve, reject) => {
+      conn.query(
+        "SELECT name FROM  assessment_name WHERE deleted=0 AND hide=0 AND code=?",
+        code,
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(err);
+          }
+        }
+      );
+    });
+  },
+
+  hideAssessmentName: data => {
+    // console.log(id_assessment);
+    return new Promise((resolve, reject) => {
+      conn.query(
+        "UPDATE assessment_name SET hide=? WHERE id_assessment = ?",
+        [data.hide, data.id_assessment],
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(err);
+          }
+        }
+      );
+    });
   }
 };
