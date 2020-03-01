@@ -2,6 +2,7 @@ const express = require("express");
 const Route = express.Router();
 
 const assessmentController = require("../controllers/assessment_name");
+const otpController = require("../controllers/otp");
 
 Route.get("/", assessmentController.getAllAssessmentName)
   .get(
@@ -14,6 +15,12 @@ Route.get("/", assessmentController.getAllAssessmentName)
   )
   .put("/delete/:id_assessment", assessmentController.deleteAssessmentById)
   .post("/insert", assessmentController.insertAssessmentName)
-  .put("/update/:id_assessment", assessmentController.updateAssessmentName);
+  .put("/update/:id_assessment", assessmentController.updateAssessmentName)
+
+  //check assessment input user
+  .get("/check/:code", assessmentController.checkAssessmentInputUser)
+
+  //change value hide
+  .put("/hide", assessmentController.hideAssessmentName);
 
 module.exports = Route;
