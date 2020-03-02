@@ -23,8 +23,8 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?, phone = ?, deleted = ?",
-                            [data.name, data.hash, data.email, data.image, data.gender, data.phone, data.deleted],
+                            "insert into admin set name = ?, password = ?, email = ?, picture = ?, gender = ?, phone = ?, address = ?, deleted = ?",
+                            [data.name, data.hash, data.email, data.image, data.gender, data.phone, data.address, data.deleted],
                             (err, res) => {
                                 if (!err) {
 
@@ -79,7 +79,7 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update admin set name = ?, gender = ?, password = ?, email = ?, phone = ?, picture = ? where id_admin = ?",
+                    "update admin set name = ?, gender = ?, password = ?, email = ?, phone = ?, picture = ?, address = ?, where id_admin = ?",
                     [data.name,data.gender, data.hash, data.email, data.phone, data.image, id_admin],
                     (err, res) => {
                         if(!err){
@@ -90,7 +90,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}', phone = ${data.phone} where id_admin = ${id_admin}`,(err, result)=>{
+                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}', phone = '${data.phone}', address = '${data.address}' where id_admin = ${id_admin}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{

@@ -63,7 +63,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}' phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,(err, result)=>{
+                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}', phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
