@@ -15,8 +15,8 @@ module.exports = {
     },
     addScore: data =>{
         return new Promise((resolve, reject)=>{
-            conn.query('insert into score_user set id_user = ?, id_assessment = ?, score = ?, atemp = atemp + ?',
-                [data.id_user, data.id_assessment, data.score, data.attemp],
+            conn.query('insert into score_user set id_user = ?, id_assessment = ?, score = ?, atemp = atemp + 1?',
+                [data.id_user, data.id_assessment, data.score, data.atemp],
                 (err, result)=>{
                     if(!err){
                         resolve(result)

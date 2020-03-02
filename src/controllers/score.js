@@ -16,8 +16,8 @@ module.exports = {
         })
     },
     addScore: (req, res) => {
-        const { id_user, id_assessment, score, attemp } = req.body;
-        const data = { id_user, id_assessment, score, attemp }
+        const { id_user, id_assessment, score, atemp } = req.body;
+        const data = { id_user, id_assessment, score, atemp }
         scoreModel.addScore(data).then(result =>{
             res.json({
                 total: result.length,
