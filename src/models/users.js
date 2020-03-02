@@ -21,8 +21,8 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into users set name = ?, password = ?, email = ?, gender = ?, picture = ?, deleted = ?",
-                            [data.name, data.hash, data.email, data.gender, data.image, data.deleted],
+                            "insert into users set name = ?, password = ?, email = ?, gender = ?, picture = ?, phone = ?, deleted = ?, address = ?",
+                            [data.name, data.hash, data.email, data.gender, data.image, data.phone, data.deleted, data.address],
                             (err, res) => {
                                 if (!err) {
                                     img.mv("uploads/users/" + data.image, err => {
@@ -52,8 +52,8 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update users set name = ?, password = ?, email = ?, gender =  ?, picture = ? where id_users = ?",
-                    [data.name, data.hash, data.email, data.gender, data.image, id_users],
+                    "update users set name = ?, password = ?, email = ?, gender =  ?, picture = ?, phone = ?, address = ? where id_users = ?",
+                    [data.name, data.hash, data.email, data.gender, data.image, data.phone, data.address, id_users],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -63,7 +63,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}' where id_users = ${id_users}`,(err, result)=>{
+                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}' phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{

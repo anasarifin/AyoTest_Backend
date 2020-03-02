@@ -58,11 +58,12 @@ module.exports = {
 
   register: (req, res) => {
     const saltRounds = 10
-    const img = req.files.image
-    const fileType = img.mimetype
+    let img = req.files.image
+    let fileType = img.mimetype
+    let type = ''
     const deleted = 0;
 
-    const { name, gender, email, password } = req.body
+    const { name, gender, email, password, phone, address } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
@@ -81,7 +82,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, gender, hash, email, image, deleted }
+      const data = { name, gender, hash, email, image, phone, address, deleted }
 
       usersModel.register(data, img).then(() => {
         res.json({
@@ -102,7 +103,7 @@ module.exports = {
     }
   },
     updateUsers: (req, res) => {
-        const { name, gender, password, email } = req.body;
+        const { name, gender, password, email, phone, address } = req.body;
         const id_users = parseInt(req.params.id);
         const saltRounds = 10
         const salt = bcrypt.genSaltSync(saltRounds)
@@ -110,7 +111,7 @@ module.exports = {
 
         var data;
         if(!req.files || Object.keys(req.files).length === 0){
-            data = { name, gender, hash, email }
+            data = { name, gender, hash, email, phone, address }
             console.log('no image update')
         }else{
         let img = req.files.image;
@@ -130,7 +131,7 @@ module.exports = {
             img.mv('uploads/users/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
-             data = { name, gender, image, hash, email }
+             data = { name, gender, image, hash, email, phone, address }
         }
         usersModel.updateUsers(data, id_users).then(()=>{
             res.json({
