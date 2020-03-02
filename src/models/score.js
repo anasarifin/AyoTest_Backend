@@ -25,5 +25,39 @@ module.exports = {
                     }
                 })
         })
+    },
+    getTopFive: id_assessment =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score desc limit 5`,(err,result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
+        })
+    },
+    highScore: id_assessment =>{
+    return new Promise((resolve, reject)=>{
+        conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score desc`,(err, result)=>{
+            if(!err){
+                resolve(result)
+            }else{
+                reject(err)
+            }
+        })
+    })
+
+    },
+    lastScore: id_assessment =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score asc`, (err, result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
+        })
     }
 }

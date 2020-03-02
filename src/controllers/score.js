@@ -24,5 +24,38 @@ module.exports = {
                 message: 'succes to add score'
             })
         })
+    },
+    getTopFive: (req, res) => {
+        const id_assessment = parseInt(req.params.id);
+        scoreModel.getTopFive(id_assessment).then(result =>{
+            res.json({
+                total: result.length,
+                status: 200,
+                data: result,
+                message: 'succes to get top five'
+            })
+        })
+    },
+    highScore: (req, res) => {
+        const id_assessment = parseInt(req.params.id);
+        scoreModel.highScore(id_assessment).then(result =>{
+            res.json({
+                total: result.length,
+                status: 200,
+                data: result[0],
+                message: 'success to get highscore'
+            })
+        })
+    },
+    lastScore: (req, res) =>{
+        const id_assessment = parseInt(req.params.id);
+        scoreModel.lastScore(id_assessment).then(result =>{
+            res.json({
+                total: result.length,
+                status: 200,
+                data: result[0],
+                message: 'success to get last score'
+            })
+        })
     }
 }
