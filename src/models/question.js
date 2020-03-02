@@ -7,12 +7,14 @@ module.exports = {
     let no = 0;
     return new Promise((resolve, reject) => {
       conn.query(
-        "SELECT  assessment_name.name, assessment_name.code ,bank_question_master.question, bank_question_master.choice_1, bank_question_master.choice_2, bank_question_master.choice_3, bank_question_master.choice_4, bank_question_master.choice_5 FROM `bank_question_master` INNER JOIN assessment_name ON bank_question_master.id_assessment_name=assessment_name.id_assessment WHERE bank_question_master.deleted = 0",
+        "SELECT  bank_question_master.id_bank_question_master, assessment_name.name, assessment_name.code ,bank_question_master.question, bank_question_master.choice_1, bank_question_master.choice_2, bank_question_master.choice_3, bank_question_master.choice_4, bank_question_master.choice_5 FROM `bank_question_master` INNER JOIN assessment_name ON bank_question_master.id_assessment_name=assessment_name.id_assessment WHERE bank_question_master.deleted = 0",
         (err, result) => {
           console.log(result);
           const data = result.map((x, index) => {
             return {
               no: index + 1,
+              id: x.id_bank_question_master,
+              code: x.code,
               question: x.question,
               answer: [
                 { label: x.choice_1, value: 1 },
