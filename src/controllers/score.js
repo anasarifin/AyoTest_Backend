@@ -1,4 +1,6 @@
 const scoreModel = require('../models/score');
+const redis = require("redis");
+const client = redis.createClient(process.env.REDIS_PORT);
 
 module.exports = {
     getScore: (req, res) =>{
@@ -28,6 +30,7 @@ module.exports = {
     getTopFive: (req, res) => {
         const id_assessment = parseInt(req.params.id);
         scoreModel.getTopFive(id_assessment).then(result =>{
+            client.setex(id_assessment, 300, JSON.stringify(result));
             res.json({
                 total: result.length,
                 status: 200,
