@@ -8,7 +8,7 @@ Route.get("/", usersController.getAllUsers)
     .post("/register", usersController.register)
     .put("/:id", usersController.updateUsers)
     .put("/", usersController.deleteUsers)
-    .get('/',usersController.searchUser)
+    .get('/search',usersController.searchUser)
 
 
 module.exports = Route;

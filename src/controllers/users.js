@@ -163,7 +163,8 @@ module.exports = {
         })
     },
     searchUser: (req, res) => {
-      usersModel.searchUser(req.query)
+      let name = req.query.name;
+      usersModel.searchUser(name)
       .then(result => {
         res.json({
           total: result.length,
