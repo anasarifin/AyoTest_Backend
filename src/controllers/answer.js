@@ -49,8 +49,7 @@ module.exports = {
     let data = {
       id_users: req.body.id_user,
       id_assessment_name: req.body.id_assessment,
-      answer: req.body.answer,
-      question_queue: req.body.question_queue
+      answer: req.body.answer
     };
     answerModel.updateAnswer(data).then(result => {
       res.json({

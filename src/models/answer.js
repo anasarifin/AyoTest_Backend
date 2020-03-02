@@ -48,9 +48,10 @@ module.exports = {
 
   updateAnswer: data => {
     return new Promise((resolve, reject) => {
+      console.log(data);
       conn.query(
-        "UPDATE bank_answer_user SET ? WHERE id_users = ? & id_assessment_name = ?",
-        [data, data.id_users, data.id_assessment_name],
+        "UPDATE bank_answer_user SET answer = ?  WHERE id_users = ? AND id_assessment_name = ?",
+        [data.answer, data.id_users, data.id_assessment_name],
         (err, result) => {
           if (!err) {
             resolve(result);
