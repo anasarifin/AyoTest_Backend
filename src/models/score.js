@@ -3,7 +3,7 @@ const conn = require("../config/db");
 module.exports = {
     getScore: data =>{
         return new Promise((resolve, reject)=>{
-            conn.query('select score , id_users, id_assessment, from score_user inner join user on score_user.id_users = users.id_users inner join assessment_name on assessment_name.id_assessment = score_user.id_assessment',
+            conn.query(`select * from score_user where id_user = ${data.id_user}`,
                 (err, result)=>{
                     if(!err){
                         resolve(result)
@@ -13,9 +13,10 @@ module.exports = {
                 })
         })
     },
-    addScore: () =>{
+    addScore: data =>{
         return new Promise((resolve, reject)=>{
-            conn.query('insert into score_user set id_users = ?, id_assessment = ?, score = ?, attemp = attemp + 1',
+            conn.query('insert into score_user set id_user = ?, id_assessment = ?, score = ?, atemp = atemp + ?',
+                [data.id_user, data.id_assessment, data.score, data.attemp],
                 (err, result)=>{
                     if(!err){
                         resolve(result)
@@ -23,6 +24,40 @@ module.exports = {
                         reject(err)
                     }
                 })
+        })
+    },
+    getTopFive: id_assessment =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score desc limit 5`,(err,result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
+        })
+    },
+    highScore: id_assessment =>{
+    return new Promise((resolve, reject)=>{
+        conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score desc`,(err, result)=>{
+            if(!err){
+                resolve(result)
+            }else{
+                reject(err)
+            }
+        })
+    })
+
+    },
+    lastScore: id_assessment =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`select * from score_user where id_assessment = ${id_assessment} order by score asc`, (err, result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
         })
     }
 }
