@@ -30,7 +30,6 @@ module.exports = {
     let data = {
       id_assessment_name: req.body.id_assessment_name,
       question: req.body.question,
-      answer_correct: req.body.answer_correct,
       choice_1: req.body.choice_1,
       choice_2: req.body.choice_2,
       choice_3: req.body.choice_3,
@@ -52,7 +51,6 @@ module.exports = {
     id_question = req.params.id_question;
     let data = {
       question: req.body.question,
-      answer_correct: req.body.answer_correct,
       choice_1: req.body.choice_1,
       choice_2: req.body.choice_2,
       choice_3: req.body.choice_3,
