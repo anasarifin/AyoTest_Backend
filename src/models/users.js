@@ -21,11 +21,11 @@ module.exports = {
                 (err, result) => {
                     if (result.length < 1) {
                         conn.query(
-                            "insert into users set id_users = ?, password = ?, email = ?, picture = ?",
-                            [data.id_users, data.hash, data.email, data.image],
+                            "insert into users set name = ?, password = ?, email = ?, gender = ?, picture = ?, phone = ?, deleted = ?, address = ?",
+                            [data.name, data.hash, data.email, data.gender, data.image, data.phone, data.deleted, data.address],
                             (err, res) => {
                                 if (!err) {
-                                    img.mv("uploads/" + data.image, err => {
+                                    img.mv("uploads/users/" + data.image, err => {
                                         if (err) return res.json(500).send(err);
                                         console.log("upload success");
                                     });
@@ -43,18 +43,17 @@ module.exports = {
             );
         });
     },
-    // notes update users masih bug ( foto )
     updateUsers: (data, id_users) => {
         return new Promise((resolve, reject) => {
             if (data.image) {
                 conn.query(
                     `select * from users where id_users = ${id_users}`,(err, result)=>{
-                        fs.unlink("uploads/" + result[0].picture, err => reject(err));
+                        fs.unlink("uploads/users/" + result[0].picture, () => resolve(err));
                     }
                 );
                 conn.query(
-                    "update users set id_users = ?, password = ?, email = ?, picture = ? where id_users = ?",
-                    [data.id_users, data.hash, data.email, data.image, id_users],
+                    "update users set name = ?, password = ?, email = ?, gender =  ?, picture = ?, phone = ?, address = ? where id_users = ?",
+                    [data.name, data.hash, data.email, data.gender, data.image, data.phone, data.address, id_users],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -64,7 +63,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update users set id_users = '${data.id_users}', password = '${data.hash}', email = '${data.email}' where id_users = ${id_users}`,(err, result)=>{
+                conn.query(`update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}' phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
@@ -88,7 +87,7 @@ module.exports = {
       searchUser: (name) => {
         return new Promise((resolve, reject) => {
           conn.query(
-            `SELECT users.name as 'siswa', assessment_name.name as 'assessment', score_user.score, score_user.date FROM users INNER JOIN score_user ON score_user.id_users=users.id_users INNER JOIN assessment_name ON score_user.id_assessment=assessment_name.id_assessment WHERE users.name LIKE '%${name}%'`,
+            `SELECT id_users, users.name as 'siswa', assessment_name.name as 'assessment', score_user.score, score_user.date FROM users INNER JOIN score_user ON score_user.id_user=users.id_users INNER JOIN assessment_name ON score_user.id_assessment=assessment_name.id_assessment WHERE users.name LIKE '%${name}%'`,
             (err, result) => {
               console.log(result);
               if (!err) {
