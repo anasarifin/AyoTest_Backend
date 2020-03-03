@@ -9,5 +9,6 @@ Route.get("/", adminController.getAllAdmin)
     .put("/:id", adminController.updateAdmin)
     .put("/", adminController.deleteAdmin)
     .get("/forgot", adminController.forgotPassword)
+    .put("/changepassword/:id", adminController.updatePasswordAdmin)
 
 module.exports = Route;

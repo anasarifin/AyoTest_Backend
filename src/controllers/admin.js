@@ -62,7 +62,7 @@ module.exports = {
     const fileType = img.mimetype
     const deleted = 0;
 
-    const { name, email, password, phone, gender } = req.body
+    const { name, email, password, phone, gender, address } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
@@ -81,7 +81,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, phone, deleted, gender, hash, email, image, deleted }
+      const data = { name, phone, deleted, gender, hash, email, image, address, deleted }
 
       adminModel.register(data, img).then(() => {
         res.json({
@@ -102,15 +102,15 @@ module.exports = {
     }
   },
     updateAdmin: (req, res) => {
-        const { name, gender, password, email, phone } = req.body;
+        const { name, gender,  email, phone, address } = req.body;
         const id_admin = parseInt(req.params.id);
-        const saltRounds = 10
-        const salt = bcrypt.genSaltSync(saltRounds)
-        const hash = bcrypt.hashSync(password, salt)
+        // const saltRounds = 10
+        // const salt = bcrypt.genSaltSync(saltRounds)
+        // const hash = bcrypt.hashSync(password, salt)
 
         var data;
         if(!req.files || Object.keys(req.files).length === 0){
-            data = { name, gender, hash, email, phone }
+            data = { name, gender, email, phone, address }
             console.log('no image update')
         }else{
         let img = req.files.image;
@@ -130,7 +130,7 @@ module.exports = {
             img.mv('uploads/admin/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
-             data = { name,gender, image, hash, email, phone }
+             data = { name,gender, image,  email, phone, address }
         }
         adminModel.updateAdmin(data, id_admin).then(()=>{
             res.json({
@@ -175,6 +175,27 @@ module.exports = {
             res.json({
                 status: 200,
                 message: 'message sent'
+            })
+        }).catch(err => {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            })
+
+     },
+    updatePasswordAdmin: (req, res) => {
+        const id_admin = req.params.id;
+        const password = req.body.password;
+
+        const saltRounds = 10
+        const salt = bcrypt.genSaltSync(saltRounds)
+        const hash = bcrypt.hashSync(password, salt)
+
+        adminModel.updatePasswordAdmin(id_admin,hash).then(() => {
+            res.json({
+                status: 200,
+                message: 'password success changed'
             })
         }).catch(err => {
                 res.status(500).json({

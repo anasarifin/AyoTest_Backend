@@ -20,4 +20,9 @@ Route.use("/assessment", assessment_name);
 Route.use("/otp", otp);
 Route.use("/answer", answer);
 
-module.exports = Route;
+
+
+// Routes
+Route.use('/users', users)
+Route.use("/assessment", assessment_name);
+module.exports = Route

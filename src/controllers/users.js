@@ -16,6 +16,17 @@ module.exports = {
             })
         })
     },
+    detailUsers: (req, res)=>{
+      const id_users = req.params.id_users;
+      usersModel.detailUsers(id_users)
+      .then(result=>{
+        res.json({
+          status:200,
+          data:result,
+          message: 'succes to get detail user'
+        })
+      })
+    },
     login: (req, res) => {
     const { email, password } = req.body
 
@@ -40,7 +51,7 @@ module.exports = {
         let tomorrow = new Date();
         tomorrow.setDate(today.getDate()+1);
 
-        const token = jwt.sign({ email: email }, process.env.SECRET_KEY, { expiresIn: '24h' })
+        const token = jwt.sign({ email: email, id: result[0].id_users }, process.env.SECRET_KEY, { expiresIn: '24h' })
         res.json({
           success: true,
           message: 'authentication success!',
@@ -58,11 +69,12 @@ module.exports = {
 
   register: (req, res) => {
     const saltRounds = 10
-    const img = req.files.image
-    const fileType = img.mimetype
+    let img = req.files.image
+    let fileType = img.mimetype
+    let type = ''
     const deleted = 0;
 
-    const { name, gender, email, password } = req.body
+    const { name, gender, email, password, phone, address } = req.body
      if ( req.files || Object.keys(req.files).length > 0 ) {
 
 
@@ -81,7 +93,7 @@ module.exports = {
       const random_id = Math.floor(Math.random() * 10) + 4
       const image = 'img-' + Date.now() + '-' + random_id + '.' + type
 
-      const data = { name, gender, hash, email, image, deleted }
+      const data = { name, gender, hash, email, image, phone, address, deleted }
 
       usersModel.register(data, img).then(() => {
         res.json({
@@ -102,15 +114,15 @@ module.exports = {
     }
   },
     updateUsers: (req, res) => {
-        const { name, gender, password, email } = req.body;
+        const { name, gender,  email, phone, address } = req.body;
         const id_users = parseInt(req.params.id);
-        const saltRounds = 10
-        const salt = bcrypt.genSaltSync(saltRounds)
-        const hash = bcrypt.hashSync(password, salt)
+        // const saltRounds = 10
+        // const salt = bcrypt.genSaltSync(saltRounds)
+        // const hash = bcrypt.hashSync(password, salt)
 
         var data;
         if(!req.files || Object.keys(req.files).length === 0){
-            data = { name, gender, hash, email }
+            data = { name, gender,  email, phone, address }
             console.log('no image update')
         }else{
         let img = req.files.image;
@@ -130,7 +142,7 @@ module.exports = {
             img.mv('uploads/users/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
-             data = { name, gender, image, hash, email }
+             data = { name, gender, image,  email, phone, address }
         }
         usersModel.updateUsers(data, id_users).then(()=>{
             res.json({
@@ -163,7 +175,8 @@ module.exports = {
     },
     // merge from hima ( searchUser )
     searchUser: (req, res) => {
-      usersModel.searchUser(req.query)
+      let name = req.query.name;
+      usersModel.searchUser(name)
       .then(result => {
         res.json({
           total: result.length,
@@ -173,5 +186,26 @@ module.exports = {
           });
       })
       .catch(err => res.json(err))
-    }
+    },
+    updatePasswordUser: (req, res) => {
+        const id_user = req.params.id;
+        const password = req.body.password;
+
+        const saltRounds = 10
+        const salt = bcrypt.genSaltSync(saltRounds)
+        const hash = bcrypt.hashSync(password, salt)
+
+        usersModel.updatePasswordUser(id_user,hash).then(() => {
+            res.json({
+                status: 200,
+                message: 'password success changed'
+            })
+        }).catch(err => {
+                res.status(500).json({
+                    status: 500,
+                    message: err
+                })
+            })
+
+     },
 }

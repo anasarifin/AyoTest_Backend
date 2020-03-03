@@ -1,7 +1,7 @@
 {
-  "name": "iotest-api",
+  "name": "AyoTestApi",
   "version": "1.0.0",
-  "description": "api for ioTest",
+  "description": "api for AyoTest",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
