@@ -16,6 +16,17 @@ module.exports = {
             })
         })
     },
+    detailUsers: (req, res)=>{
+      const id_users = req.params.id_users;
+      usersModel.detailUsers(id_users)
+      .then(result=>{
+        res.json({
+          status:200,
+          data:result,
+          message: 'succes to get detail user'
+        })
+      })
+    },
     login: (req, res) => {
     const { email, password } = req.body
 

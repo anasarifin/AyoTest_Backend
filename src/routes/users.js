@@ -10,6 +10,7 @@ Route.get("/", usersController.getAllUsers)
     .put("/", usersController.deleteUsers)
     .get('/',usersController.searchUser)
     .get('/search',usersController.searchUser)
+    .get("/:id_users", usersController.detailUsers)
 
 
 module.exports = Route;
