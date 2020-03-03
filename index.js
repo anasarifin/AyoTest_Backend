@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(`${__dirname}/public`));
 
 // Index Route
-app.get("/", (req, res) => {
+app.get("/premium", (req, res) => {
   res.render("index", {
     stripePublishableKey: keys.stripePublishableKey
   });
