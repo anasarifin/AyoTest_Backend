@@ -21,8 +21,10 @@
     "mv": "^2.1.1",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.3",
+    "nodemon": "^2.0.2",
     "redis": "^3.0.2",
     "serialize-javascript": "^3.0.0",
+    "stripe": "^8.24.1",
     "telesignsdk": "^2.2.1",
     "twilio": "^3.39.5",
     "uuid": "^7.0.1"

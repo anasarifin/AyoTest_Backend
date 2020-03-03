@@ -17,7 +17,7 @@ module.exports = {
   getAllAssessmentNameById: id_assessment => {
     return new Promise((resolve, reject) => {
       conn.query(
-        "SELECT  * FROM assessment_name WHERE id_assessment=?",
+        "SELECT  assessment_name.* , COUNT(bank_question_master.question) AS 'jumlah_soal' FROM assessment_name INNER JOIN bank_question_master ON bank_question_master.id_assessment_name = assessment_name.id_assessment WHERE id_assessment=?",
         id_assessment,
         (err, result) => {
           if (!err) {
@@ -124,10 +124,10 @@ module.exports = {
       );
     });
   },
-    // merge from hima (search assessment)
-  searchAssessment: (name) => {
+  // merge from hima (search assessment)
+  searchAssessment: name => {
     return new Promise((resolve, reject) => {
-        console.log('name',name)
+      console.log("name", name);
       conn.query(
         `SELECT an.id_assessment, an.name, a.id_admin, a.name as admin_name FROM assessment_name as an LEFT JOIN admin as a ON an.id_admin=a.id_admin WHERE an.name LIKE '%${name}%'`,
         (err, result) => {
@@ -137,7 +137,7 @@ module.exports = {
           } else {
             reject(new Error(err));
           }
-        },
+        }
       );
     });
   }
