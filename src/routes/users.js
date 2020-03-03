@@ -11,6 +11,7 @@ Route.get("/", usersController.getAllUsers)
     .get('/',usersController.searchUser)
     .get('/search',usersController.searchUser)
     .get("/:id_users", usersController.detailUsers)
+    .put("/changepassword/:id", usersController.updatePasswordUser)
 
 
 module.exports = Route;

@@ -82,10 +82,9 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update users set name = ?, password = ?, email = ?, gender =  ?, picture = ?, phone = ?, address = ? where id_users = ?",
+                    "update users set name = ?,  email = ?, gender =  ?, picture = ?, phone = ?, address = ? where id_users = ?",
                     [
                         data.name,
-                        data.hash,
                         data.email,
                         data.gender,
                         data.image,
@@ -103,7 +102,7 @@ module.exports = {
                 );
             } else {
                 conn.query(
-                    `update users set name = '${data.name}', password = '${data.hash}', email = '${data.email}', gender = '${data.gender}', phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,
+                    `update users set name = '${data.name}', email = '${data.email}', gender = '${data.gender}', phone = '${data.phone}', address = '${data.address}' where id_users = ${id_users}`,
                     (err, result) => {
                         if (!err) {
                             resolve(result);
@@ -143,5 +142,16 @@ module.exports = {
                 }
             );
         });
+    },
+    updatePasswordUser: (id_user, hash) =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`update users set password = '${hash}' where id_users = ${id_user}`,(err,result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
+        })
     }
 };

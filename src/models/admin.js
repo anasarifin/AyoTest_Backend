@@ -79,8 +79,8 @@ module.exports = {
                     }
                 );
                 conn.query(
-                    "update admin set name = ?, gender = ?, password = ?, email = ?, phone = ?, picture = ?, address = ?, where id_admin = ?",
-                    [data.name,data.gender, data.hash, data.email, data.phone, data.image, id_admin],
+                    "update admin set name = ?, gender = ?, email = ?, phone = ?, picture = ?, address = ?, where id_admin = ?",
+                    [data.name,data.gender, data.email, data.phone, data.image, id_admin],
                     (err, res) => {
                         if(!err){
                         resolve(res)
@@ -90,7 +90,7 @@ module.exports = {
                     }
                 );
             }else{
-                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', password = '${data.hash}', email = '${data.email}', phone = '${data.phone}', address = '${data.address}' where id_admin = ${id_admin}`,(err, result)=>{
+                conn.query(`update admin set name = '${data.name}', gender = '${data.gender}', email = '${data.email}', phone = '${data.phone}', address = '${data.address}' where id_admin = ${id_admin}`,(err, result)=>{
                     if(!err){
                         resolve(result)
                     }else{
@@ -152,4 +152,15 @@ module.exports = {
             })
         })
     },
+    updatePasswordAdmin: (id_admin, hash) =>{
+        return new Promise((resolve, reject)=>{
+            conn.query(`update admin set password = '${hash}' where id_admin = ${id_admin}`,(err,result)=>{
+                if(!err){
+                    resolve(result)
+                }else{
+                    reject(err)
+                }
+            })
+        })
+    }
 };
