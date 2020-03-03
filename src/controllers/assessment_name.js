@@ -1,4 +1,6 @@
 const assessmentModel = require("../models/assessment_name");
+// mv for upload image
+// const mv = require('mv')
 
 module.exports = {
   getAllAssessmentName: (req, res) => {
