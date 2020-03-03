@@ -195,7 +195,7 @@ module.exports = {
         const salt = bcrypt.genSaltSync(saltRounds)
         const hash = bcrypt.hashSync(password, salt)
 
-        adminModel.updatePasswordUser(id_user,hash).then(() => {
+        usersModel.updatePasswordUser(id_user,hash).then(() => {
             res.json({
                 status: 200,
                 message: 'password success changed'
