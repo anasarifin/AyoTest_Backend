@@ -44,7 +44,9 @@ module.exports = {
     let data = {
       id_admin: req.body.id_admin,
       name: req.body.name,
-      code: req.body.code
+      code: req.body.code,
+      deleted: 0,
+     hide:0,
     };
     assessmentModel.insertAssessmentName(data).then(result => {
       res.json({
