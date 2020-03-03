@@ -4,27 +4,68 @@ const fs = require("fs");
 module.exports = {
   getAllAssessmentName: () => {
     return new Promise((resolve, reject) => {
-      conn.query("SELECT  * FROM assessment_name", (err, result) => {
-        if (!err) {
-          resolve(result);
-        } else {
-          reject(err);
-        }
-      });
-    });
-  },
-
-  getAllAssessmentNameById: id_assessment => {
-    return new Promise((resolve, reject) => {
       conn.query(
-        "SELECT  assessment_name.* , COUNT(bank_question_master.question) AS 'jumlah_soal' FROM assessment_name INNER JOIN bank_question_master ON bank_question_master.id_assessment_name = assessment_name.id_assessment WHERE id_assessment=?",
-        id_assessment,
+        "SELECT  * FROM assessment_name WHERE deleted=0",
         (err, result) => {
           if (!err) {
             resolve(result);
           } else {
             reject(err);
           }
+        }
+      );
+    });
+  },
+
+  getAllAssessmentNameById: id_assessment => {
+    return new Promise((resolve, reject) => {
+      let ex_id_assessment = 0;
+      let ex_id_admin = 0;
+      let ex_name = "";
+      let ex_code = 0;
+      let ex_deleted = 0;
+      let ex_hide = 0;
+      let ex_jumlah_soal = 0;
+      let ex_jumlah_peserta = 0;
+
+      conn.query(
+        "SELECT COUNT(id_users) AS 'jumlah_peserta'  FROM bank_answer_user WHERE id_assessment_name=?",
+        id_assessment,
+        (err, hasil) => {
+          hasil.map(e => {
+            ex_jumlah_peserta = e.jumlah_peserta;
+          });
+          conn.query(
+            "SELECT  assessment_name.* , COUNT(bank_question_master.id_assessment_name) AS 'jumlah_soal'  FROM assessment_name INNER JOIN bank_question_master ON bank_question_master.id_assessment_name = assessment_name.id_assessment WHERE id_assessment=?",
+            id_assessment,
+            (err, result) => {
+              result.forEach(e => {
+                (ex_id_assessment = e.id_assessment),
+                  (ex_id_admin = e.id_admin),
+                  (ex_name = e.name),
+                  (ex_code = e.code),
+                  (ex_deleted = e.ex_deleted),
+                  (ex_hide = e.hide),
+                  (ex_jumlah_soal = e.jumlah_soal);
+              });
+              let data = {
+                id_assessment: ex_id_assessment,
+                id_admin: ex_id_admin,
+                name: ex_name,
+                code: ex_code,
+                deleted: ex_deleted,
+                hide: ex_hide,
+                jumlah_peserta: ex_jumlah_peserta,
+
+                jumlah_soal: ex_jumlah_soal
+              };
+              if (!err) {
+                resolve(data);
+              } else {
+                reject(err);
+              }
+            }
+          );
         }
       );
     });
