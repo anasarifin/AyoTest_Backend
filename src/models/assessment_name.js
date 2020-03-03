@@ -75,6 +75,7 @@ module.exports = {
     return new Promise((resolve, reject) => {
       conn.query(
         "SELECT  * FROM assessment_name WHERE id_admin=?",
+
         id_admin,
         (err, result) => {
           if (!err) {
