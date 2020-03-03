@@ -13,6 +13,17 @@ module.exports = {
             });
         });
     },
+    detailUsers:(id_users) => {
+        return new Promise((resolve, reject)=>{
+            conn.query('SELECT * FROM users WHERE id_users=?',id_users, (err,result)=>{
+                if (!err){
+                    resolve(result);
+                } else {
+                    reject(err);
+                }
+            })
+        })
+    },
     register: (data, img) => {
         return new Promise((resolve, reject) => {
             conn.query(
