@@ -4,7 +4,9 @@ const questionModel = require("../models/question");
 
 module.exports = {
   getAllQuestion: (req, res) => {
-    questionModel.getAllQuestion().then(result => {
+    code = req.params.code;
+    console.log(code);
+    questionModel.getAllQuestion(code).then(result => {
       res.json({
         total: result.length,
         status: 200,
