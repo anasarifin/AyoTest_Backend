@@ -7,13 +7,14 @@ module.exports = {
     let no = 0;
     return new Promise((resolve, reject) => {
       conn.query(
-        "SELECT  bank_question_master.id_bank_question_master, assessment_name.name, assessment_name.code ,bank_question_master.question, bank_question_master.choice_1, bank_question_master.choice_2, bank_question_master.choice_3, bank_question_master.choice_4, bank_question_master.choice_5 FROM `bank_question_master` INNER JOIN assessment_name ON bank_question_master.id_assessment_name=assessment_name.id_assessment WHERE bank_question_master.deleted = 0 AND assessment_name.code=? ",
+        "SELECT  bank_question_master.id_bank_question_master, assessment_name.id_assessment, assessment_name.name, assessment_name.code ,bank_question_master.question, bank_question_master.choice_1, bank_question_master.choice_2, bank_question_master.choice_3, bank_question_master.choice_4, bank_question_master.choice_5 FROM `bank_question_master` INNER JOIN assessment_name ON bank_question_master.id_assessment_name=assessment_name.id_assessment WHERE bank_question_master.deleted = 0 AND assessment_name.code=? ",
         code,
         (err, result) => {
-          console.log(result);
           const data = result.map((x, index) => {
             return {
               no: index + 1,
+
+              id_assessment: x.id_assessment,
               id: x.id_bank_question_master,
               code: x.code,
               question: x.question,
@@ -26,6 +27,8 @@ module.exports = {
               ]
             };
           });
+          console.log(data);
+
           // result.map(e => {
           //   data.no_soal = no + 1;
           //   data.question = e.question;
@@ -54,6 +57,8 @@ module.exports = {
         "SELECT  assessment_name.name, assessment_name.code ,bank_question_master.question, bank_question_master.choice_1, bank_question_master.choice_2, bank_question_master.choice_3, bank_question_master.choice_4, bank_question_master.choice_5 FROM `bank_question_master` INNER JOIN assessment_name ON bank_question_master.id_assessment_name=assessment_name.id_assessment WHERE bank_question_master.deleted = 0 AND bank_question_master.id_bank_question_master=?",
         id_question,
         (err, result) => {
+          console.log(result);
+
           const data = result.map((x, index) => {
             return {
               no: index + 1,
