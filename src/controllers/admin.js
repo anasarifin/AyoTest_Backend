@@ -127,7 +127,7 @@ module.exports = {
     }
             const random_id = Math.floor(Math.random() * 10) + 4;
             const image = 'img-' + Date.now() + '-' + random_id + '.' + type;
-            img.mv('uploads/admin/'+ image, err =>{
+            img.mv('uploads/'+ image, err =>{
                 if (err) return res.status(200).send('update data with image')
             })
              data = { name,gender, image,  email, phone, address }

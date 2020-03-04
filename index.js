@@ -24,7 +24,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Set Static Folder
-app.use(express.static(`${__dirname}/public`));
+app.use("/uploads", express.static("./uploads"));
+
+
 
 // Index Route
 app.get("/premium", (req, res) => {

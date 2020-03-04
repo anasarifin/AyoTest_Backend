@@ -30,7 +30,7 @@ module.exports = {
 
                                     
                                     // upload image to folder uploads
-                                    img.mv("uploads/admin/" + data.image, err => {
+                                    img.mv("uploads/" + data.image, err => {
                                         if (err) return res.json(500).send(err);
                                         console.log('upload image succes')
                                     });
@@ -75,7 +75,7 @@ module.exports = {
             if (data.image) {
                 conn.query(
                     `select * from admin where id_admin = ${id_admin}`,(err, result)=>{
-                        fs.unlink("uploads/admin/" + result[0].picture, () => resolve(err));
+                        fs.unlink("uploads/" + result[0].picture, () => resolve(err));
                     }
                 );
                 conn.query(

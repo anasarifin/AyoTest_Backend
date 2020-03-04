@@ -49,7 +49,7 @@ module.exports = {
                             (err, res) => {
                                 if (!err) {
                                     img.mv(
-                                        "uploads/users/" + data.image,
+                                        "uploads/" + data.image,
                                         err => {
                                             if (err)
                                                 return res.json(500).send(err);
@@ -76,7 +76,7 @@ module.exports = {
                 conn.query(
                     `select * from users where id_users = ${id_users}`,
                     (err, result) => {
-                        fs.unlink("uploads/users/" + result[0].picture, () =>
+                        fs.unlink("uploads/" + result[0].picture, () =>
                             resolve(err)
                         );
                     }
