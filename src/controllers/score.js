@@ -80,4 +80,23 @@ module.exports = {
             })
         })
     }
+    ,
+    searchScore: (req, res) => {
+                let name = req.query.name;
+                let id_user = req.query.id_user
+                console.log(name)
+                scoreModel.searchScore(name, id_user)
+            .then(result => {
+                res.json({
+                                    total: result.length,
+                                    status: 200,
+                                    data: result,
+                                    message: "Success to get All score Name Search"
+                                  
+                });
+                          
+            })
+                  .catch(err => res.json(err));
+              
+    }
 }

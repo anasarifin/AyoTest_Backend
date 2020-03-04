@@ -10,6 +10,7 @@ Route.get("/", scoreController.getScore)
     .get("/highscore/:id",  scoreController.highScore)
     .get("/lastscore/:id",  scoreController.lastScore)
     .get("/sort", scoreController.getSortScore)
+    .get('/search',scoreController.searchScore);
 
 
 module.exports = Route;

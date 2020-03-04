@@ -98,4 +98,21 @@ module.exports = {
         }
       })
     }
+    ,
+    searchScore: (name, id_user) => {
+        return new Promise((resolve, reject) => {
+            console.log('name',name)
+          conn.query(
+            `SELECT an.id_assessment, su.id_user, an.name, su.score, su.date FROM score_user as su LEFT JOIN assessment_name as an ON su.id_assessment=su.id_assessment WHERE an.name LIKE '%${name}%' AND id_user= ${id_user}`,
+            (err, result) => {
+              console.log(result);
+              if (!err) {
+                resolve(result);
+              } else {
+                reject(new Error(err));
+              }
+            },
+          );
+        });
+      }
 };
