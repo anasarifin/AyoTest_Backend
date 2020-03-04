@@ -1,4 +1,5 @@
 const assessmentModel = require("../models/assessment_name");
+const shortid = require('short-id');
 // mv for upload image
 // const mv = require('mv')
 
@@ -44,7 +45,7 @@ module.exports = {
     let data = {
       id_admin: req.body.id_admin,
       name: req.body.name,
-      code: req.body.code,
+      code: shortid.generate(),
       deleted: 0,
      hide:0,
     };
