@@ -1,0 +1,24 @@
+<section class="py-2">
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <h1 class="display-4 mt-3 pt-5">
+        Dapatkan Akses Premium Teacher Ke Aplikasi AyoTest
+      </h1>
+      <p class="lead">akses live score lebih mudah untuk memantau assessment secara langsung</p>
+      <form action="/charge" method="POST">
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="pk_test_Vxc282labdFQDeyFePjbvwIg00tpX2rJbv" data-amount="704" data-name="AyoTest Premium Account"
+          data-description="Beli Akses Premium Kamu Sekarang" data-image="./img/index.jpeg" data-locale="auto">
+          </script>
+        <script>
+          // Hide default stripe button
+          document.getElementsByClassName('stripe-button-el')[0].style.display = 'none';
+        </script>
+        <button type="submit" class="btn btn-outline-dark text-white btn-lg">Beli cuma Rp.100.000</button>
+      </form>
+    </div>
+    <div class="col-md-6 text-center ">
+      <img class="center" src="./img/login.jpeg" alt="" height=' 50%'>
+    </div>
+  </div>
+</section>
