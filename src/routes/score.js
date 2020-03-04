@@ -9,5 +9,7 @@ Route.get("/", scoreController.getScore)
     .get("/topfive/:id", cacheScore, scoreController.getTopFive)
     .get("/highscore/:id",  scoreController.highScore)
     .get("/lastscore/:id",  scoreController.lastScore)
+    .get("/sort", scoreController.getSortScore)
+
 
 module.exports = Route;

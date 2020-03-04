@@ -71,5 +71,31 @@ module.exports = {
         }
       );
     });
-  }
+  },
+    getSortScore: (data, order) => {
+    return new Promise((resolve, reject) => {
+      let sortBy = "score";
+      if (sortBy) {
+        const sortableColumn = ['score']
+        if (!sortableColumn.includes(sortBy)) {
+          reject(new Error('invalid sort column'))
+        }
+        let orderBy;
+        if(order=='0'){
+            orderBy='';
+        }else{
+            orderBy=`order by ${sortBy} ${order}`;
+        }
+        conn.query(`select score_user.* , assessment_name.name AS 'assessment' , admin.name AS 'teacher' from score_user INNER JOIN assessment_name ON  score_user.id_assessment = assessment_name.id_assessment INNER JOIN admin ON assessment_name.id_admin=admin.id_admin where id_user = ${data.id_user} ${orderBy}`,
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else {
+            reject(err);
+          }
+        });
+        
+        }
+      })
+    }
 };

@@ -60,5 +60,24 @@ module.exports = {
                 message: 'success to get last score'
             })
         })
+    },
+    getSortScore: (req, res) =>{
+        const id_user = req.query.id_user;
+        const order = req.query.order;
+        const data = { id_user }
+        let orders;
+        if (!order){
+            orders = '0'
+        }else{
+            orders = order 
+        }
+        scoreModel.getSortScore(data, orders).then(result =>{
+            res.json({
+                total: result.length,
+                status: 200,
+                data: result,
+                message: 'succes to get score !!'
+            })
+        })
     }
 }

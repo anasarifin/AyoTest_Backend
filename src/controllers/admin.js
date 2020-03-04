@@ -40,7 +40,7 @@ module.exports = {
         let tomorrow = new Date();
         tomorrow.setDate(today.getDate()+1);
 
-        const token = jwt.sign({ email: email }, process.env.SECRET_KEY, { expiresIn: '24h' })
+        const token = jwt.sign({ email: email ,id: result[0].id_admin}, process.env.SECRET_KEY, { expiresIn: '24h' })
         res.json({
           success: true,
           message: 'authentication success!',
