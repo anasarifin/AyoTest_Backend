@@ -3,7 +3,7 @@ const Route = express.Router();
 
 const questionController = require("../controllers/question");
 
-Route.get("/", questionController.getAllQuestion)
+Route.get("/:code", questionController.getAllQuestion)
   .get("/detail/:id_question", questionController.getQuestionById)
   .patch("/delete/:id_question", questionController.deleteQuestionById)
   .post("/insert", questionController.insertQuestion)

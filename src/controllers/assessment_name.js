@@ -47,7 +47,7 @@ module.exports = {
       name: req.body.name,
       code: shortid.generate(),
       deleted: 0,
-     hide:0,
+      hide: 0
     };
     assessmentModel.insertAssessmentName(data).then(result => {
       res.json({
