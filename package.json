@@ -24,7 +24,7 @@
     "nodemailer": "^6.4.3",
     "nodemon": "^2.0.2",
     "redis": "^3.0.2",
-    "serialize-javascript": "^3.0.0",
+    "serialize-javascript": "^3.1.0",
     "short-id": "0.1.0-1",
     "stripe": "^8.24.1",
     "telesignsdk": "^2.2.1",
